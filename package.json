@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/compedit/common-youtube",
   "dependencies": {
+    "random-global": "^1.0.0",
     "require-sdk": "0.0.2"
   },
   "devDependencies": {

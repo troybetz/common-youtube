@@ -2,6 +2,8 @@
  * Module dependencies
  */
 
+var EventEmitter = require('events');
+var globalize = require('random-global');
 var loadAPI = require('./lib/load-api');
 var prepareEmbed = require('./lib/prepare-embed');
 var sdk;
@@ -23,6 +25,12 @@ function YouTube(id) {
   prepareEmbed(id);
   this.createPlayer(id);
 }
+
+/**
+ * Mixin events
+ */
+
+YouTube.prototype = new EventEmitter();
 
 /**
  * Play the video.
@@ -55,5 +63,66 @@ YouTube.prototype.createPlayer = function(id) {
   var self = this;
   sdk(function(err, YT) {
     self.player = new YT.Player(id);
+    self.globalizeEventHandlers();
+    self.bindEvents();
   });
+};
+
+/**
+ * Bind events
+ *
+ * @api private
+ */
+
+YouTube.prototype.bindEvents = function() {
+  this.player.addEventListener('onReady', this.playerReadyHandle);
+  this.player.addEventListener('onStateChange', this.stateChangeHandle);
+};
+
+/**
+ * Called when player is fully integrated with the embedded video.
+ *
+ * @api private
+ */
+
+YouTube.prototype.handlePlayerReady = function() { 
+  this.emit('ready');
+};
+
+/**
+ * Handle various player events
+ *
+ * @param {Object} event
+ * @api private
+ */
+
+YouTube.prototype.handlePlayerStateChange = function(event) {
+  switch(event.data) {
+
+    case window.YT.PlayerState.PLAYING:
+      this.emit('play');
+      break;
+
+    case window.YT.PlayerState.PAUSED:
+      this.emit('pause');
+      break;
+
+    case window.YT.PlayerState.ENDED: 
+      this.emit('end');
+      break;
+
+    default: 
+      return;
+  }
+};
+
+/**
+ * YouTube API requires global event handlers for some reason.
+ *
+ * @api private
+ */
+
+YouTube.prototype.globalizeEventHandlers = function() {
+  this.playerReadyHandle = globalize(this.handlePlayerReady.bind(this));
+  this.stateChangeHandle = globalize(this.handlePlayerStateChange.bind(this));
 };

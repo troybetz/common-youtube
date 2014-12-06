@@ -9,3 +9,7 @@ var YouTube = require('../');
  */
 
 var player = new YouTube('youtube-embed');
+
+player.on('ready', function() {
+  player.play();
+});

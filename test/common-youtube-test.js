@@ -10,6 +10,7 @@ var noop = function() {};
 
 describe('common-youtube', function() {
   beforeEach(function() {
+
     /**
      * Add a fake embedded video to control
      */
@@ -22,14 +23,20 @@ describe('common-youtube', function() {
     /**
      * Mock out YouTube iframe API
      */
-    
+
     playerMock = {
       playVideo: sinon.spy(),
-      pauseVideo: sinon.spy()
+      pauseVideo: sinon.spy(),
+      addEventListener: sinon.spy()
     };
 
     window.YT = {
-      Player: sinon.stub().returns(playerMock)
+      Player: sinon.stub().returns(playerMock),
+      PlayerState: {
+        ENDED: 0,
+        PLAYING: 1,
+        PAUSED: 2
+      }
     };
 
     loadAPIStub = sinon.stub().returns(function(cb) {
@@ -74,6 +81,42 @@ describe('common-youtube', function() {
       player.pause();
 
       assert.ok(playerMock.pauseVideo.called);
+    });
+  });
+
+  describe('events', function() {
+    it('should emit a `ready` event when player has loaded', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('ready', done);
+      player.handlePlayerReady();
+    });
+
+    it('should emit a `play` event when playing', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('play', done);
+      player.handlePlayerStateChange({
+        data: window.YT.PlayerState.PLAYING
+      });
+    });
+
+    it('should emit a `pause` event is paused', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('pause', done);
+      player.handlePlayerStateChange({
+        data: window.YT.PlayerState.PAUSED
+      });
+    });
+
+    it('should emit a `end` event when video has ended', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('end', done);
+      player.handlePlayerStateChange({
+        data: window.YT.PlayerState.ENDED
+      });
     });
   });
 });
