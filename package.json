@@ -19,7 +19,9 @@
     "url": "https://github.com/compedit/common-youtube/issues"
   },
   "homepage": "https://github.com/compedit/common-youtube",
-  "dependencies": {},
+  "dependencies": {
+    "require-sdk": "0.0.2"
+  },
   "devDependencies": {
     "browserify": "^7.0.0",
     "mocha": "^2.0.1",
