@@ -1,0 +1,34 @@
+{
+  "name": "common-youtube",
+  "version": "0.0.0",
+  "description": "simple wrapper over the YouTube iframe API",
+  "main": "index.jsx",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:compedit/common-youtube.git"
+  },
+  "keywords": [
+    "youtube",
+    "wrapper",
+    "iframe",
+    "common"
+  ],
+  "author": "troy betz <troybetz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/compedit/common-youtube/issues"
+  },
+  "homepage": "https://github.com/compedit/common-youtube",
+  "dependencies": {
+    "random-global": "^1.0.0",
+    "require-sdk": "0.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^4.0.0",
+    "browserify": "^7.0.0",
+    "mocha": "^2.0.1",
+    "proxyquireify": "^1.1.0",
+    "sinon": "^1.12.1",
+    "watchify": "^2.1.1"
+  }
+}
