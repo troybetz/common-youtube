@@ -24,6 +24,7 @@
     "require-sdk": "0.0.2"
   },
   "devDependencies": {
+    "autoprefixer": "^4.0.0",
     "browserify": "^7.0.0",
     "mocha": "^2.0.1",
     "proxyquireify": "^1.1.0",
