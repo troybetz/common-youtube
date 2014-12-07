@@ -27,7 +27,8 @@ describe('common-youtube', function() {
     playerMock = {
       playVideo: sinon.spy(),
       pauseVideo: sinon.spy(),
-      addEventListener: sinon.spy()
+      addEventListener: sinon.spy(),
+      removeEventListener: sinon.spy()
     };
 
     window.YT = {
@@ -65,6 +66,34 @@ describe('common-youtube', function() {
     it('creates a new instance of `YT.Player`', function() {
       var player = new YouTube('youtube-embed');
       assert.ok(window.YT.Player.calledWith('youtube-embed'));
+    });
+  });
+
+  describe('destruction', function() {
+    it('should remove player event listeners', function() {
+      var player = new YouTube('youtube-embed');
+      player.destroy();
+      window.player = player;
+      assert.ok(playerMock.removeEventListener.calledTwice);
+    });
+
+    it('should delete global event handlers', function() {
+      var player = new YouTube('youtube-embed');
+      var playerReadyHandle = player.playerReadyHandle;
+      var stateChangeHandle = player.stateChangeHandle;
+
+      player.destroy();
+
+      assert.equal(window.playerReadyHandle, undefined);
+      assert.equal(window.stateChangeHandle, undefined);
+      assert.equal(player.playerReadyHandle, undefined);
+      assert.equal(player.stateChangeHandle, undefined);
+    });
+
+    it('should delete its internal player', function() {
+      var player = new YouTube('youtube-embed');
+      player.destroy();
+      assert.equal(player.player, undefined);
     });
   });
 

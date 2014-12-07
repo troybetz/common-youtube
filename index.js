@@ -53,6 +53,16 @@ YouTube.prototype.pause = function() {
 };
 
 /**
+ * Destroy a player
+ */
+
+YouTube.prototype.destroy = function() {
+  this.unbindEvents();
+  this.deglobalizeEventHandlers();
+  delete this.player;
+};
+
+/**
  * Create a controller for the video
  *
  * @param {String} id of embedded video
@@ -77,6 +87,17 @@ YouTube.prototype.createPlayer = function(id) {
 YouTube.prototype.bindEvents = function() {
   this.player.addEventListener('onReady', this.playerReadyHandle);
   this.player.addEventListener('onStateChange', this.stateChangeHandle);
+};
+
+/**
+ * Bind events
+ *
+ * @api private
+ */
+
+YouTube.prototype.unbindEvents = function() {
+  this.player.removeEventListener('onReady', this.playerReadyHandle);
+  this.player.removeEventListener('onStateChange', this.stateChangeHandle);
 };
 
 /**
@@ -125,4 +146,17 @@ YouTube.prototype.handlePlayerStateChange = function(event) {
 YouTube.prototype.globalizeEventHandlers = function() {
   this.playerReadyHandle = globalize(this.handlePlayerReady.bind(this));
   this.stateChangeHandle = globalize(this.handlePlayerStateChange.bind(this));
+};
+
+/**
+ * Delete global event handlers on the window
+ *
+ * @api private
+ */
+
+YouTube.prototype.deglobalizeEventHandlers = function() {
+  delete window[this.playerReadyHandle];
+  delete window[this.stateChangeHandle];
+  delete this.playerReadyHandle;
+  delete this.stateChangeHandle;
 };
