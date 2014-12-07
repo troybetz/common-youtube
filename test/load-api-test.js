@@ -27,7 +27,7 @@ describe('load-api', function() {
     });
   });
 
-  it('creates and destroys a global event handler', function() {
+  it('should create and destroy a global event handler', function() {
     loadAPI();
     assert.ok(window.onYouTubeIframeAPIReady);
 

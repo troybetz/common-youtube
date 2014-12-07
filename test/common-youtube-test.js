@@ -58,14 +58,66 @@ describe('common-youtube', function() {
   });
 
   describe('initialization', function() {
-    it('loads the YouTube iframe API', function() {
+    it('should load the YouTube iframe API', function() {
       var player = new YouTube('youtube-embed');
       assert.ok(loadAPIStub.called);
     });
 
-    it('creates a new instance of `YT.Player`', function() {
+    it('should create a new instance of `YT.Player`', function() {
       var player = new YouTube('youtube-embed');
       assert.ok(window.YT.Player.calledWith('youtube-embed'));
+    });
+  });
+
+  describe('functionality', function() {
+    it('can play a video', function() {
+      var player = new YouTube('youtube-embed');
+      player.play();
+
+      assert.ok(playerMock.playVideo.called);
+    });
+
+    it('can pause a video', function() {
+      var player = new YouTube('youtube-embed');
+      player.pause();
+
+      assert.ok(playerMock.pauseVideo.called);
+    });
+  });
+
+  describe('events', function() {
+    it('should emit `ready` when loaded', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('ready', done);
+      player.handlePlayerReady();
+    });
+
+    it('should emit `play` when playing', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('play', done);
+      player.handlePlayerStateChange({
+        data: window.YT.PlayerState.PLAYING
+      });
+    });
+
+    it('should emit `pause` when paused', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('pause', done);
+      player.handlePlayerStateChange({
+        data: window.YT.PlayerState.PAUSED
+      });
+    });
+
+    it('should emit `end` when finished', function(done) {
+      var player = new YouTube('youtube-embed');
+
+      player.on('end', done);
+      player.handlePlayerStateChange({
+        data: window.YT.PlayerState.ENDED
+      });
     });
   });
 
@@ -94,58 +146,6 @@ describe('common-youtube', function() {
       var player = new YouTube('youtube-embed');
       player.destroy();
       assert.equal(player.player, undefined);
-    });
-  });
-
-  describe('functionality', function() {
-    it('can play a video', function() {
-      var player = new YouTube('youtube-embed');
-      player.play();
-
-      assert.ok(playerMock.playVideo.called);
-    });
-
-    it('can pause a video', function() {
-      var player = new YouTube('youtube-embed');
-      player.pause();
-
-      assert.ok(playerMock.pauseVideo.called);
-    });
-  });
-
-  describe('events', function() {
-    it('should emit a `ready` event when player has loaded', function(done) {
-      var player = new YouTube('youtube-embed');
-
-      player.on('ready', done);
-      player.handlePlayerReady();
-    });
-
-    it('should emit a `play` event when playing', function(done) {
-      var player = new YouTube('youtube-embed');
-
-      player.on('play', done);
-      player.handlePlayerStateChange({
-        data: window.YT.PlayerState.PLAYING
-      });
-    });
-
-    it('should emit a `pause` event is paused', function(done) {
-      var player = new YouTube('youtube-embed');
-
-      player.on('pause', done);
-      player.handlePlayerStateChange({
-        data: window.YT.PlayerState.PAUSED
-      });
-    });
-
-    it('should emit a `end` event when video has ended', function(done) {
-      var player = new YouTube('youtube-embed');
-
-      player.on('end', done);
-      player.handlePlayerStateChange({
-        data: window.YT.PlayerState.ENDED
-      });
     });
   });
 });
