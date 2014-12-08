@@ -54,6 +54,8 @@ YouTube.prototype.pause = function() {
 
 /**
  * Destroy a player
+ *
+ * @api public
  */
 
 YouTube.prototype.destroy = function() {

@@ -8,7 +8,7 @@ var YouTube = require('../');
  * Create new player
  */
 
-var player = new YouTube('youtube-embed');
+window.player = new YouTube('youtube-embed');
 
 /**
  * Event handlers
