@@ -2,7 +2,7 @@
   "name": "common-youtube",
   "version": "0.0.0",
   "description": "simple wrapper over the YouTube iframe API",
-  "main": "index.jsx",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:compedit/common-youtube.git"
