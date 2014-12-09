@@ -6,6 +6,7 @@ var EventEmitter = require('events');
 var globalize = require('random-global');
 var loadAPI = require('./lib/load-api');
 var prepareEmbed = require('./lib/prepare-embed');
+
 var sdk;
 
 /**
@@ -15,7 +16,7 @@ var sdk;
 module.exports = YouTube;
 
 /**
- * Create new `YouTube` player.
+ * Create new `YouTube` controller
  *
  * @param {String} id of embedded video
  */
@@ -23,7 +24,7 @@ module.exports = YouTube;
 function YouTube(id) {
   sdk = loadAPI();
   prepareEmbed(id);
-  this.createPlayer(id);
+  this.attachToEmbed(id);
 }
 
 /**
@@ -53,7 +54,8 @@ YouTube.prototype.pause = function() {
 };
 
 /**
- * Destroy a player
+ * Remove all event handlers and free up internal player for
+ * garbage collection.
  *
  * @api public
  */
@@ -65,14 +67,15 @@ YouTube.prototype.destroy = function() {
 };
 
 /**
- * Create a controller for the video
+ * Attach a controller to the embedded video
  *
  * @param {String} id of embedded video
  * @api private
  */
 
-YouTube.prototype.createPlayer = function(id) {
+YouTube.prototype.attachToEmbed = function(id) {
   var self = this;
+  
   sdk(function(err, YT) {
     self.player = new YT.Player(id);
     self.globalizeEventHandlers();
@@ -81,7 +84,7 @@ YouTube.prototype.createPlayer = function(id) {
 };
 
 /**
- * Bind events
+ * Bind player events
  *
  * @api private
  */
@@ -92,7 +95,7 @@ YouTube.prototype.bindEvents = function() {
 };
 
 /**
- * Bind events
+ * Unbind all player events
  *
  * @api private
  */
