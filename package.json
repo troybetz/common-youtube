@@ -1,6 +1,6 @@
 {
   "name": "common-youtube",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "simple wrapper over the YouTube iframe API",
   "main": "index.js",
   "repository": {
