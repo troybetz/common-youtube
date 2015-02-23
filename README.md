@@ -14,7 +14,7 @@ $ npm install common-youtube
 
 ```js
 var YouTube = require('common-youtube');
-var player = YouTube('id-of-iframe');
+var player = new YouTube('id-of-iframe');
 
 player.on('ready', function() {
   player.play();
